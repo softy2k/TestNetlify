@@ -1,94 +1,78 @@
-<script setup>
-import { RouterLink, RouterView } from "vue-router";
-import HelloWorld from "./components/HelloWorld.vue";
-</script>
-
 <template>
-  <header>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="@/assets/logo.svg"
-      width="125"
-      height="125"
-    />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <div class="ma-4 pa-2" style="font-size: 2rem; border: 2px solid red">
-        Update Project
+  <div class="container">
+    <h1>Mama</h1>
+    <div class="image-container">
+      <div class="card" v-for="(img, index) in images" :key="index">
+        <img :src="img.src" :alt="`Image ${index + 1}`" />
+        <button @click="downloadImage(img.src, img.name)">Download</button>
       </div>
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
     </div>
-  </header>
-
-  <RouterView />
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+<script>
+import image1 from "./assets/image1.jpg";
+import image2 from "./assets/image2.jpg";
+// import image3 from './assets/image3.jpg'
+
+export default {
+  name: "App",
+  data() {
+    return {
+      images: [
+        { src: image1, name: "image1.jpg" },
+        { src: image2, name: "image2.jpg" },
+        // { src: image3, name: 'image3.jpg' }
+      ],
+    };
+  },
+  methods: {
+    downloadImage(url, filename) {
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },
+  },
+};
+</script>
+
+<style>
+.container {
+  padding: 20px;
+  font-family: sans-serif;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.image-container {
+  display: flex;
+  gap: 20px;
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+img {
+  max-width: 200px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+button {
+  padding: 6px 12px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+button:hover {
+  background-color: #2980b9;
 }
 </style>
